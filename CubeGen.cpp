@@ -31,4 +31,32 @@ int main(int argc, char* argv[])
     chptr = strchr(argv[2],'.');
     if (chptr != NULL) *chptr = '\0';
     strcpy_s(outfile, strcat(argv[2], ".cube"));
+
+    // Generate cube file
+    switch (inType)
+    {
+    case fileType::XYZ: BuildCubeFile_XYZ(infile, outfile, "title", "desc"); break;
+
+    case fileType::ToFeTOut: BuildCubeFile_ToFeT(infile, outfile, "title", "desc"); break;
+
+    case fileType::MESOut: BuildCubeFile_MES(infile, outfile, "title", "desc"); break;
+
+    }
+
+
+}
+
+void BuildCubeFile_XYZ(char in[], char out[], std::string title, std::string desc)
+{
+    // To implement
+}
+
+void BuildCubeFile_ToFeT(char in[], char out[], std::string title, std::string desc)
+{
+    // To implement
+}
+
+void BuildCubeFile_MES(char in[], char out[], std::string title, std::string desc)
+{
+    // To implement
 }
