@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
     char* chptr;
     strcpy_s(infile, argv[2]);
     
-    // Create the path to our outfile by removing the infile file extension and replacing it with '.cube'
+    // Create the path to outfile by removing the infile file extension and replacing it with '.cube'
     chptr = strchr(argv[2],'.');
     if (chptr != NULL) *chptr = '\0';
     strcpy_s(outfile, strcat(argv[2], ".cube"));
