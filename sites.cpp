@@ -3,6 +3,7 @@
 
 site::site(double x, double y, double z, double charge) : pos(x, y, z), charge(charge) {}
 
+// Remember: pos data is stored in multiples of Bohr raduis
 
 bool sites_xyz::BuildSiteList(char* xyz_file)
 {
@@ -21,3 +22,5 @@ bool sites_tofetout::BuildSiteList(char* tofetout_file)
 	// ToDo: implement
 	return false;
 }
+
+

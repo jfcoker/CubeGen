@@ -16,9 +16,7 @@ private:
 
 public:
 
-
-
-	// The position of the site.
+	// The position of the site. Coordinates are multiples of the bohr radius.
 	vec pos;
 
 	// The charge of the site in multiples of the standard charge. Equalt to the occupation probability multiplied by -1.
@@ -27,6 +25,9 @@ public:
 	// Construct a site object
 	site(double x, double y, double z, double charge);
 
+	// outputs information about the site formatted as: <atomic number of atom i (int)> <nuclear charge of atom i (float)> <position of atom i (3 x float)>
+	friend std::ostream& operator<<(std::ostream& os, const site& st);
+
 };
 
 // An abstract class which holds a list of sites.
@@ -34,9 +35,15 @@ public:
 // Each of these methods is treated as an implementation of the pure virtual function held by this abstract class.
 class sites
 {
-private:
 
-	const std::vector<site> siteList;
+public:
+
+	const std::vector<site> list;
+
+	// For each site, outputs a newline formatted as: <atomic number of atom i (int)> <nuclear charge of atom i (float)> <position of atom i (3 x float)>
+	friend std::ostream& operator<<(std::ostream& os, const sites& sts);
+
+private:
 
 	// Pure virtual function with multiple implementations, one for each input file type.
 	virtual bool BuildSiteList(char* file) = 0;
