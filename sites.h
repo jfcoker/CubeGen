@@ -2,7 +2,7 @@
 #include "pch.h"
 
 // A single site
-const class site
+class site
 {
 private:
 
@@ -38,7 +38,7 @@ class sites
 
 public:
 
-	const std::vector<site> list;
+	std::vector<site> list;
 
 	// For each site, outputs a newline formatted as: <atomic number of atom i (int)> <nuclear charge of atom i (float)> <position of atom i (3 x float)>
 	friend std::ostream& operator<<(std::ostream& os, const sites& sts);
@@ -52,6 +52,8 @@ private:
 
 class sites_xyz : public sites {bool BuildSiteList(char* xyz_file);};
 
+// Note: If MESolver found multiple solutions, only the first will be used to build the cube file.
+// This can happen if the singular value tolerance is set too high.
 class sites_mesout : public sites { bool BuildSiteList(char* mesout_file); };
 
 class sites_tofetout : public sites { bool BuildSiteList(char* tofetout_file); };
