@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "sites.h"
 #include "CubeGen.h"
 
 fileType inType;
@@ -33,30 +34,21 @@ int main(int argc, char* argv[])
     strcpy_s(outfile, strcat(argv[2], ".cube"));
 
     // Generate cube file
-    switch (inType)
-    {
-    case fileType::XYZ: BuildCubeFile_XYZ(infile, outfile, "title", "desc"); break;
+    //switch (inType)
+    //{
+    //case fileType::XYZ: BuildCubeFile_XYZ(infile, outfile, "title", "desc"); break;
 
-    case fileType::ToFeTOut: BuildCubeFile_ToFeT(infile, outfile, "title", "desc"); break;
+    //case fileType::ToFeTOut: BuildCubeFile_ToFeT(infile, outfile, "title", "desc"); break;
 
-    case fileType::MESOut: BuildCubeFile_MES(infile, outfile, "title", "desc"); break;
+    //case fileType::MESOut: BuildCubeFile_MES(infile, outfile, "title", "desc"); break;
 
-    }
+    //}
 
 
 }
 
-void BuildCubeFile_XYZ(char in[], char out[], std::string title, std::string desc)
+bool WriteCubeFile(sites& siteList, char out[], std::string title, std::string desc)
 {
-    // To implement
-}
-
-void BuildCubeFile_ToFeT(char in[], char out[], std::string title, std::string desc)
-{
-    // To implement
-}
-
-void BuildCubeFile_MES(char in[], char out[], std::string title, std::string desc)
-{
-    // To implement
+    // ToDo: implement
+    return false;
 }
