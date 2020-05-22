@@ -32,7 +32,8 @@ int main(int argc, char* argv[])
     // Create the path to outfile by removing the infile file extension and replacing it with '.cube'
     chptr = strchr(argv[2],'.');
     if (chptr != NULL) *chptr = '\0';
-    strcpy_s(outfile, strcat(argv[2], ".cube"));
+    strcat_s(argv[2], sizeof argv[2], ".cube");
+    strcpy_s(outfile, argv[2]);
 
     // Generate cube file
     //switch (inType)
@@ -79,18 +80,18 @@ bool WriteCubeFile_NoVolData(sites& sites, std::string title, std::string desc, 
     cube << desc << "\n";
 
     // Write <# sites (int)> <origin coords (3 x float)> <# data vals per voxel (int)>
-    cube << fss.Int(sites.list.size()) << fss.Dec(0.0) << fss.Dec(0.0) << fss.Dec(0.0) << fss.Int(1) << "\n";
+    cube << fss::Int(sites.list.size()) << fss::Dec(0.0) << fss::Dec(0.0) << fss::Dec(0.0) << fss::Int(1) << "\n";
 
     // Write <# voxels along X,Y,Z-axis (int)> <vector defining size of voxel in units of bohr radius (3 x float)> 
-    cube << fss.Int(1) << fss.Dec(1.0) << fss.Dec(0.0) << fss.Dec(0.0) << "\n";
-    cube << fss.Int(1) << fss.Dec(0.0) << fss.Dec(1.0) << fss.Dec(0.0) << "\n";
-    cube << fss.Int(1) << fss.Dec(0.0) << fss.Dec(0.0) << fss.Dec(1.0) << "\n";
+    cube << fss::Int(1) << fss::Dec(1.0) << fss::Dec(0.0) << fss::Dec(0.0) << "\n";
+    cube << fss::Int(1) << fss::Dec(0.0) << fss::Dec(1.0) << fss::Dec(0.0) << "\n";
+    cube << fss::Int(1) << fss::Dec(0.0) << fss::Dec(0.0) << fss::Dec(1.0) << "\n";
 
     // Write <atomic number of atom i (int)> <nuclear charge of atom i (float)> <position of atom i (3 x float)>
     cube << sites;
 
     // Write value of the single voxel.
-    cube << fss.Dec(0.0) << "\n";
+    cube << fss::Dec(0.0) << "\n";
 
     cube.close();
     return true;
@@ -198,16 +199,16 @@ bool WriteCubeFile_NoVolData(sites& sites, std::string title, std::string desc, 
 
      //// Write <# sites (int)> <origin coords (3 x float)> <# data vals per site (int)>
      //formattedStrStream fss;
-     //cube << fss.Int(sites.size()) << fss.Dec(minX) << fss.Dec(minY) << fss.Dec(minZ) << fss.Int(1) << "\n";
+     //cube << fss::Int(sites.size()) << fss::Dec(minX) << fss::Dec(minY) << fss::Dec(minZ) << fss::Int(1) << "\n";
 
      //// Write <# voxels along X,Y,Z-axis (int)> <vector defining size of voxel in units of bohr radius (3 x float)> 
-     //cube << fss.Int(Nx) << fss.Dec(vx) << fss.Dec(0.0) << fss.Dec(0.0) << "\n";
-     //cube << fss.Int(Ny) << fss.Dec(0.0) << fss.Dec(vy) << fss.Dec(0.0) << "\n";
-     //cube << fss.Int(Nz) << fss.Dec(0.0) << fss.Dec(0.0) << fss.Dec(vz) << "\n";
+     //cube << fss::Int(Nx) << fss::Dec(vx) << fss::Dec(0.0) << fss::Dec(0.0) << "\n";
+     //cube << fss::Int(Ny) << fss::Dec(0.0) << fss::Dec(vy) << fss::Dec(0.0) << "\n";
+     //cube << fss::Int(Nz) << fss::Dec(0.0) << fss::Dec(0.0) << fss::Dec(vz) << "\n";
 
      //// Write <atomic number of atom i (int)> <nuclear charge of atom i (float)> <position of atom i (3 x float)>
      //for (int i = 0; i < sites.size(); i++)
-     //    cube << fss.Int(1) << fss.Dec(sites[i].occProb * -1.0) << fss.Dec(ToBohr(sites[i].pos.X)) << fss.Dec(ToBohr(sites[i].pos.Y)) << fss.Dec(ToBohr(sites[i].pos.Z)) << "\n";
+     //    cube << fss::Int(1) << fss::Dec(sites[i].occProb * -1.0) << fss::Dec(ToBohr(sites[i].pos.X)) << fss::Dec(ToBohr(sites[i].pos.Y)) << fss::Dec(ToBohr(sites[i].pos.Z)) << "\n";
 
      //// Write data for each voxel
      //// Outer loop: Z, Middle loop: Y, Inner loop: X
@@ -216,8 +217,8 @@ bool WriteCubeFile_NoVolData(sites& sites, std::string title, std::string desc, 
      //    {
      //        for (int i = 0; i < Nx; i++)
      //        {
-     //            //cube << fss.Dec(valArray[i + j + k]); // Uncomment this line if we are using voxels / volumetric data
-     //            cube << fss.Dec(0.0);
+     //            //cube << fss::Dec(valArray[i + j + k]); // Uncomment this line if we are using voxels / volumetric data
+     //            cube << fss::Dec(0.0);
      //            if ((i + 1) % 6 == 0) cube << "\n"; // Don't include more than 6 values per line
      //        }
      //        cube << "\n";
