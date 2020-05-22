@@ -3,7 +3,7 @@
 #include "sites.h"
 #include "CubeGen.h"
 
-fileType inType;
+fileType inType = fileType::XYZ;
 
 int main(int argc, char* argv[])
 {
@@ -21,19 +21,19 @@ int main(int argc, char* argv[])
         exit(-1);
     }
 
-    if (strcmp(argv[1], "XYZ")) inType = fileType::XYZ;
-    else if (strcmp(argv[1], "TOFET")) inType = fileType::ToFeTOut;
-    else if (strcmp(argv[1], "MES")) inType = fileType::MESOut;
+    if (strcmp(argv[1], "XYZ") == 0) inType = fileType::XYZ;
+    else if (strcmp(argv[1], "TOFET") == 0) inType = fileType::ToFeTOut;
+    else if (strcmp(argv[1], "MES") == 0) inType = fileType::MESOut;
 
     char infile[128], outfile[128];
     char* chptr;
     strcpy_s(infile, argv[2]);
     
     // Create the path to outfile by removing the infile file extension and replacing it with '.cube'
-    chptr = strchr(argv[2],'.');
-    if (chptr != NULL) *chptr = '\0';
-    strcat_s(argv[2], sizeof argv[2], ".cube");
     strcpy_s(outfile, argv[2]);
+    chptr = strchr(outfile,'.');
+    if (chptr != NULL) *chptr = '\0';
+    strcat_s(outfile, sizeof outfile, ".cube");
 
     // Now build our list of sites, using the impementation that matches the input filetype.
     sites* pSites = NULL;
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     pSites->BuildSiteList(infile);
 
     // Now write our .cube file
-    WriteCubeFile(pSites, "title", "desc", outfile);
+    WriteCubeFile_NoVolData(pSites, "title", "desc", outfile);
 
     return 0;
 
@@ -95,7 +95,7 @@ bool WriteCubeFile_NoVolData(sites* pSites, std::string title, std::string desc,
     cube << fss::Int(1) << fss::Dec(0.0) << fss::Dec(0.0) << fss::Dec(1.0) << "\n";
 
     // Write <atomic number of atom i (int)> <nuclear charge of atom i (float)> <position of atom i (3 x float)>
-    cube << &pSites;
+    cube << *pSites;
 
     // Write value of the single voxel.
     cube << fss::Dec(0.0) << "\n";

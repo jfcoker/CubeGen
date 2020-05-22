@@ -169,6 +169,6 @@ std::ostream& operator<<(std::ostream& os, const site& st)
 std::ostream& operator<<(std::ostream& os, const sites& sts)
 {
     for (int i = 0; i < sts.list.size(); i++)
-        os << sts.list[i];
+        os << sts.list[i] << "\n";
     return os;
 }
