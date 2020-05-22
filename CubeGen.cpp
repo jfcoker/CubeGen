@@ -35,23 +35,30 @@ int main(int argc, char* argv[])
     strcat_s(argv[2], sizeof argv[2], ".cube");
     strcpy_s(outfile, argv[2]);
 
-    // Generate cube file
-    //switch (inType)
-    //{
-    //case fileType::XYZ: BuildCubeFile_XYZ(infile, outfile, "title", "desc"); break;
+    // Now build our list of sites, using the impementation that matches the input filetype.
+    sites* pSites = NULL;
+    sites_xyz sts_xyz;
+    sites_mesout sts_mesout;
+    sites_tofetout sts_tofetout;
 
-    //case fileType::ToFeTOut: BuildCubeFile_ToFeT(infile, outfile, "title", "desc"); break;
+    switch (inType)
+    {
+    case fileType::XYZ: pSites = &sts_xyz; break;
+    case fileType::MESOut: pSites = &sts_mesout; break;
+    case fileType::ToFeTOut: pSites = &sts_tofetout; break;
+    default: pSites = &sts_xyz; break;
+    }
+    
+    pSites->BuildSiteList(infile);
 
-    //case fileType::MESOut: BuildCubeFile_MES(infile, outfile, "title", "desc"); break;
+    // Now write our .cube file
+    WriteCubeFile(pSites, "title", "desc", outfile);
 
-    //}
-
+    return 0;
 
 }
 
-double ToBohr(double angs) { return angs * 1.8897259886; }
-
-bool WriteCubeFile_NoVolData(sites& sites, std::string title, std::string desc, char out[])
+bool WriteCubeFile_NoVolData(sites* pSites, std::string title, std::string desc, char out[])
 {
     const size_t maxCommentLength = 78; //80 chars minus 2 for possible linefeed and carriage return chars.
     if (title.length() >= maxCommentLength || desc.length() >= maxCommentLength)
@@ -60,7 +67,7 @@ bool WriteCubeFile_NoVolData(sites& sites, std::string title, std::string desc, 
         return false;
     }
 
-    if (sites.list.empty())
+    if (pSites->list.empty())
     {
         std::cout << "***ERROR***: Couldn't build .cube file: empty site vector provided.\n";
         return false;
@@ -80,7 +87,7 @@ bool WriteCubeFile_NoVolData(sites& sites, std::string title, std::string desc, 
     cube << desc << "\n";
 
     // Write <# sites (int)> <origin coords (3 x float)> <# data vals per voxel (int)>
-    cube << fss::Int(sites.list.size()) << fss::Dec(0.0) << fss::Dec(0.0) << fss::Dec(0.0) << fss::Int(1) << "\n";
+    cube << fss::Int(pSites->list.size()) << fss::Dec(0.0) << fss::Dec(0.0) << fss::Dec(0.0) << fss::Int(1) << "\n";
 
     // Write <# voxels along X,Y,Z-axis (int)> <vector defining size of voxel in units of bohr radius (3 x float)> 
     cube << fss::Int(1) << fss::Dec(1.0) << fss::Dec(0.0) << fss::Dec(0.0) << "\n";
@@ -88,7 +95,7 @@ bool WriteCubeFile_NoVolData(sites& sites, std::string title, std::string desc, 
     cube << fss::Int(1) << fss::Dec(0.0) << fss::Dec(0.0) << fss::Dec(1.0) << "\n";
 
     // Write <atomic number of atom i (int)> <nuclear charge of atom i (float)> <position of atom i (3 x float)>
-    cube << sites;
+    cube << &pSites;
 
     // Write value of the single voxel.
     cube << fss::Dec(0.0) << "\n";
@@ -97,7 +104,7 @@ bool WriteCubeFile_NoVolData(sites& sites, std::string title, std::string desc, 
     return true;
  }
 
- bool WriteCubeFile(sites& sites, std::string title, std::string desc, char out[])
+ bool WriteCubeFile(sites* pSites, std::string title, std::string desc, char out[])
  {
 
      // Not currently implemented: Just display an error message and return false to indicate failure.

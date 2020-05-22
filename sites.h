@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "IO.h"
 
 // A single site
 class site
@@ -40,21 +41,20 @@ public:
 
 	std::vector<site> list;
 
+	// Virtual function with multiple implementations, one for each input file type.
+	virtual bool BuildSiteList(char* file) = 0;
+
 	// For each site, outputs a newline formatted as: <atomic number of atom i (int)> <nuclear charge of atom i (float)> <position of atom i (3 x float)>
 	friend std::ostream& operator<<(std::ostream& os, const sites& sts);
 
-private:
-
-	// Pure virtual function with multiple implementations, one for each input file type.
-	virtual bool BuildSiteList(char* file) = 0;
 
 };
 
-class sites_xyz : public sites {bool BuildSiteList(char* xyz_file);};
+class sites_xyz : public sites { public: bool BuildSiteList(char* xyz_file); };
 
 // Note: If MESolver found multiple solutions, only the first will be used to build the cube file.
 // This can happen if the singular value tolerance is set too high.
-class sites_mesout : public sites { bool BuildSiteList(char* mesout_file); };
+class sites_mesout : public sites { public: bool BuildSiteList(char* mesout_file); };
 
-class sites_tofetout : public sites { bool BuildSiteList(char* tofetout_file); };
+class sites_tofetout : public sites { public: bool BuildSiteList(char* tofetout_file); };
 

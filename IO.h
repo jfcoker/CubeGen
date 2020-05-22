@@ -1,6 +1,8 @@
 #pragma once
 #include "pch.h"
-#include "sites.h"
+
+//Represents different possible formats of our input data file.
+enum class fileType { XYZ, ToFeTOut, MESOut };
 
 class fss
 {

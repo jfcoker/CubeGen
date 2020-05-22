@@ -1,9 +1,11 @@
 #include "pch.h"
+#include "IO.h"
 #include "sites.h"
 
 site::site(double x, double y, double z, double charge) : pos(x, y, z), charge(charge) {}
 
-// Remember: pos data is stored in multiples of Bohr raduis
+
+double ToBohr(double angs) { return angs * 1.8897259886; }
 
 bool sites_xyz::BuildSiteList(char* xyz_file)
 {
@@ -36,7 +38,7 @@ bool sites_xyz::BuildSiteList(char* xyz_file)
         }
 
         // .xyz file contains no charge/occupancy data, just defualt to 0.
-        list.push_back(site(x, y, z, 0.0));
+        list.push_back(site(ToBohr(x), ToBohr(y), ToBohr(z), 0.0));
     }
 
     in.close();
@@ -82,7 +84,7 @@ bool sites_mesout::BuildSiteList(char* mesout_file)
                 }
 
                 // multiply occupation probability by -1.0 to get charge.
-                list.push_back(site(x, y, z, o * -1.0));
+                list.push_back(site(ToBohr(x), ToBohr(y), ToBohr(z), o * -1.0));
 
                 std::getline(in, line);
             }
@@ -140,7 +142,7 @@ bool sites_tofetout::BuildSiteList(char* tofetout_file)
                 }
 
                 // multiply occupation probability by -1.0 to get charge.
-                list.push_back(site(x, y, z, o * -1.0));
+                list.push_back(site(ToBohr(x), ToBohr(y), ToBohr(z), o * -1.0));
 
                 std::getline(in, line);
             }
@@ -158,4 +160,15 @@ bool sites_tofetout::BuildSiteList(char* tofetout_file)
 
 }
 
+std::ostream& operator<<(std::ostream& os, const site& st)
+{
+    os << fss::Int(1) << fss::Dec(st.charge) << fss::Dec(st.pos.X) << fss::Dec(st.pos.Y) << fss::Dec(st.pos.Z);
+    return os;
+}
 
+std::ostream& operator<<(std::ostream& os, const sites& sts)
+{
+    for (int i = 0; i < sts.list.size(); i++)
+        os << sts.list[i];
+    return os;
+}
