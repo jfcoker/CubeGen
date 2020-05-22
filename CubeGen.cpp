@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 
 }
 
-bool WriteCubeFile(sites& siteList, char out[], std::string title, std::string desc)
+bool WriteCubeFile(sites& siteList, std::string title, std::string desc, char out[])
 {
     // ToDo: implement
     return false;
