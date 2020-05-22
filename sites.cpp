@@ -129,7 +129,7 @@ bool sites_tofetout::BuildSiteList(char* tofetout_file)
 
             // Now start reading in site data until we reach EOF or a blank line, indicating we have reached the end of the block.
             std::getline(in, line);
-            while (!linestream.eof && !line.empty())
+            while (!linestream.eof() && !line.empty())
             {
                 linestream >> x >> y >> z >> o;
                 if (linestream.fail())
